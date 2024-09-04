@@ -8,7 +8,8 @@ class Jeemacoder extends React.Component {
             telephoneInput: "",
             coders: []
         }
-        this.handleClick = this.handleClick.bind(this)
+        this.handleClick = this.handleClick.bind(this),
+        this.handleEdit=this.handleEdit.bind(this)
     }
 
     handleClick() {
@@ -19,11 +20,21 @@ class Jeemacoder extends React.Component {
             telephone: this.state.telephoneInput
         }
         this.setState({ coders: [newCoder, ...this.state.coders] })
-        this.state({
+        this.setState({
             prenomInput: "",
             nomInput: "",
             emailInput: "",
             telephoneInput: "",
+        })
+    }
+
+    handleEdit(index){
+        const coder=this.state.coders[index]
+        this.setState({
+            prenomInput:coder.prenom,
+            nomInput:coder.nom,
+            emailInput:coder.email,
+            telephoneInput:coder.telephone
         })
     }
 
@@ -63,7 +74,7 @@ class Jeemacoder extends React.Component {
                                 className="form-control" />
                         </div>
                         <div class="col-lg-6 py-2">
-                            <label className="form-label">Telephone {this.state.telephoneInput}</label>
+                            <label className="form-label">Telephone</label>
                             <input type="number"
                                 value={this.state.telephoneInput}
                                 onChange={(e) => {
@@ -83,19 +94,25 @@ class Jeemacoder extends React.Component {
                                 <th scope="col">Nom</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Telephone</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                          {
-                            this.state.coders.map((coder)=>{
-                                return <tr>
-                                    <td>{coder.prenom}</td>
-                                    <td>{coder.nom}</td>
-                                    <td>{coder.email}</td>
-                                    <td>{coder.telephone}</td>
-                                </tr>  
-                            })
-                          }
+                            {
+                                this.state.coders.map((coder,index) => {
+                                    return <tr>
+                                        <td>{coder.prenom}</td>
+                                        <td>{coder.nom}</td>
+                                        <td>{coder.email}</td>
+                                        <td>{coder.telephone}</td>
+                                        <td>
+                                            <button onClick={()=>this.handleEdit(index)} className="btn btn-warning">
+                                                Modifier
+                                            </button>
+                                        </td>
+                                    </tr>
+                                })
+                            }
                         </tbody>
                     </table>
                 </div>
