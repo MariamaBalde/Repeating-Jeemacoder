@@ -6,10 +6,12 @@ class Jeemacoder extends React.Component {
             nomInput: "",
             emailInput: "",
             telelphoneInput: "",
-            coders:[]
+            coders:[],
+            editIndex:null
         }
         this.handleClick=this.handleClick.bind(this)
         this.handleEdit=this.handleEdit.bind(this)
+        this.handleSaveEdit=this.handleSaveEdit.bind(this)
     }
 
     handleClick(){
@@ -18,8 +20,14 @@ class Jeemacoder extends React.Component {
             nom:this.state.nomInput,
             email:this.state.emailInput,
             telephone:this.state.telelphoneInput
-        }                      
-        this.setState({coders:[newCoder,...this.state.coders]})
+        }     
+        if (this.state.editIndex!==null) {
+            const updatedCoders=[...this.state.coders];
+            updatedCoders[this.state.editIndex]=newCoder;
+            this.setState({coders:updatedCoders,editIndex:null});
+        }else{
+            this.setState({ coders: [newCoder, ...this.state.coders] })
+        }                 
         this.setState({
             prenomInput:"",
             nomInput:"",
@@ -34,8 +42,29 @@ this.setState({
     prenomInput:coder.prenom,
     nomInput:coder.nom,
     emailInput:coder.email,
-    telelphoneInput:coder.telephone
+    telelphoneInput:coder.telephone,
+    editIndex:index
 })
+    }
+
+    handleSaveEdit(){
+        if (this.state.editIndex!==null) {
+            const updatedCoders=[...this.state.coders];
+            updatedCoders[this.state.editIndex]={
+                prenom:this.state.prenomInput,
+                nom:this.state.nom,
+                email:this.state.emailInput,
+                telephone:this.state.telelphoneInput
+            };
+            this.setState({
+                coders:updatedCoders,
+                prenomInput:"",
+                nomInput:"",
+                emailInput:"",
+                telelphoneInput:"",
+                editIndex:null
+            })
+        }
     }
 
     render() {
@@ -83,7 +112,15 @@ this.setState({
                                 class="form-control" />
                         </div>
                     </div>
-                    <button onClick={this.handleClick} class="btn btn-success w-100">Submit</button>
+                    <div>
+                        {this.state.editIndex!==null ?
+                            <button onClick={this.handleSaveEdit} 
+                            class="btn btn-success w-100">Enregistrer
+                            </button> : 
+                            <button onClick={this.handleClick} 
+                            class="btn btn-success w-100">Submit</button>
+                        }
+                    </div>
                 </div>
                 <div className="mt-5 container">
                     <h3 className="text-center">Coders</h3>
