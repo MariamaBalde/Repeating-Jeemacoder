@@ -22,13 +22,7 @@ class Jeemacoder extends React.Component {
             telephone: this.state.telephoneInput
         }
 
-        if (this.state.editIndex!==null) {
-            const updatedCoders=[...this.state.coders];
-            updatedCoders[this.state.editIndex]=newCoder;
-            this.setState({coders:updatedCoders,editIndex:null});
-        }else{
-            this.setState({ coders: [newCoder, ...this.state.coders] })
-        }
+        this.setState({ coders: [newCoder, ...this.state.coders] })
 
         this.setState({
             prenomInput: "",
@@ -37,28 +31,35 @@ class Jeemacoder extends React.Component {
             telephoneInput: "",
         })
     }
-
+    // Lrsk l'utilisateur clique sur le bouton "Modifier", la fonction handleEdit est appelée.
     handleEdit(index) {
+        // Cet funct° récupère les informations de l'utilisateur à modifier (via l'indice index passé à handleEdit
         const coder = this.state.coders[index];
+        // et remplit les champs du formulaire avec les valeurs du "coder" sélectionné..
         this.setState({
             prenomInput: coder.prenom,
             nomInput: coder.nom,
             emailInput: coder.email,
             telephoneInput: coder.telephone,
+            //  définit la valeur de editIndex à l'indice de cet utilisateur, indiquant qu'une modification est en cours.
             editIndex:index
         })
     }
+    
 
     handleSaveEdit() {
-        if (this.state.editIndex!==null) {
-        //    Création d'une copie du tableau d'objets coders
+        const modifCoder={
+            prenom:this.state.prenomInput,
+            nom:this.state.nomInput,
+            email:this.state.emailInput,
+            telephone:this.state.telephoneInput
+        }
+        //    Création d'une copie du tableau coders
             const updatedCoders = [...this.state.coders];
-            updatedCoders[this.state.editIndex] = {
-                prenom: this.state.prenomInput,
-                nom: this.state.nom,
-                email: this.state.emailInput,
-                telephone: this.state.telephoneInput
-            };
+            // L'utilisateur modifié est remplacé dans le tableau à l'indice editIndex avec les nouvelles informations 
+            updatedCoders[this.state.editIndex] = modifCoder
+            // Ensuite, l'état (state) est mis à jour avec le tableau updatedCoders
+            // Le formulaire est ensuite réinitialisé (champs vides), et editIndex est remis à null, indiquant que la modification est terminée.
             this.setState({
                 coders: updatedCoders,
                 prenomInput: "",
@@ -67,10 +68,8 @@ class Jeemacoder extends React.Component {
                 telephoneInput: "",
                 editIndex:null
             })
-        }
-      
-     
     }
+
 
     render() {
         return (
@@ -78,7 +77,7 @@ class Jeemacoder extends React.Component {
                 <h6 className="text-center">Jeemacoder gestion utilisateur</h6>
                 <div className="">
                     <div className="row">
-                        <div class="col-lg-6 py-2">
+                        <div className="col-lg-6 py-2">
                             <label className="form-label">Prenom </label>
                             <input type="text"
                                 value={this.state.prenomInput}
@@ -88,7 +87,7 @@ class Jeemacoder extends React.Component {
                                 className="form-control" />
                         </div>
                         <div class="col-lg-6 py-2">
-                            <label for="exampleInputPassword1" className="form-label">Nom</label>
+                            <label htmlFor="exampleInputPassword1" className="form-label">Nom</label>
                             <input type="text"
                                 value={this.state.nomInput}
                                 onChange={(e) => {
@@ -108,7 +107,7 @@ class Jeemacoder extends React.Component {
                                 className="form-control" />
                         </div>
                         <div class="col-lg-6 py-2">
-                            <label for="exampleInputPassword1" className="form-label">Telephone</label>
+                            <label htmlFor="exampleInputPassword1" className="form-label">Telephone</label>
                             <input type="number"
                                 value={this.state.telephoneInput}
                                 onChange={(e) => {
@@ -130,7 +129,7 @@ class Jeemacoder extends React.Component {
                 </div>
                 <div className="mt-5 container">
                     <h3 className="text-center">Coders</h3>
-                    <table class="table">
+                    <table className="table">
                         <thead>
                             <tr>
                                 <th scope="col">Prénom</th>
@@ -149,7 +148,7 @@ class Jeemacoder extends React.Component {
                                         <td>{coder.email}</td>
                                         <td>{coder.telephone}</td>
                                         <td>
-                                            <button onClick={() => this.handleEdit(index)} class="btn btn-warning">Modifier</button>
+                                            <button onClick={() => this.handleEdit(index)} className="btn btn-warning">Modifier</button>
                                         </td>
                                     </tr>
                                 })
