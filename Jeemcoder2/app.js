@@ -22,13 +22,7 @@ class Jeemacoder extends React.Component {
             email: this.state.emailInput,
             telephone: this.state.telephoneInput
         }
-        if (this.state.editIndex!==null) {
-            const updatedCoders=[...this.state.coders];
-            updatedCoders[this.state.editIndex]=newCoder;
-            this.setState({coders:updatedCoders,editIndex:null});
-        }else{
-            this.setState({ coders:[newCoder, ...this.state.coders] })
-        }
+        this.setState({ coders: [newCoder, ...this.state.coders] })
         this.setState({
             prenomInput: "",
             nomInput: "",
@@ -49,14 +43,14 @@ class Jeemacoder extends React.Component {
     }
 
     handleSaveEdit(){
-        if (this.state.editIndex!==null) {
+      const modifCoder={
+        prenom:this.state.prenomInput,
+        nom:this.state.nomInput,
+        email:this.state.nomInput,
+        telephone:this.state.telephoneInput
+      }
             const updatedCoders=[...this.state.coders];
-            updatedCoders[this.state.editIndex]={
-                prenom:this.state.prenomInput,
-                nom:this.state.nomInput,
-                email:this.state.emailInput,
-                telephone:this.state.telephoneInput
-            };
+            updatedCoders[this.state.editIndex]=modifCoder
             this.setState({
                 coders:updatedCoders,
                 prenomInput:"",
@@ -66,7 +60,6 @@ class Jeemacoder extends React.Component {
                 editIndex:null
             })
         }
-    }
 
     render() {
         return (
