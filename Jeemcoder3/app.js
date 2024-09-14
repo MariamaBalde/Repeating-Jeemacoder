@@ -6,65 +6,76 @@ class Jeemacoder extends React.Component {
             nomInput: "",
             emailInput: "",
             telelphoneInput: "",
-            coders:[],
-            editIndex:null
+            coders: [],
+            // isEditing: false,
+            index: null
         }
-        this.handleClick=this.handleClick.bind(this)
-        this.handleEdit=this.handleEdit.bind(this)
-        this.handleSaveEdit=this.handleSaveEdit.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleEdit = this.handleEdit.bind(this)
+        this.handleSaveEdit = this.handleSaveEdit.bind(this)
     }
-
-    handleClick(){
-        const newCoder={
-            prenom:this.state.prenomInput,
-            nom:this.state.nomInput,
-            email:this.state.emailInput,
-            telephone:this.state.telelphoneInput
-        }     
-        if (this.state.editIndex!==null) {
-            const updatedCoders=[...this.state.coders];
-            updatedCoders[this.state.editIndex]=newCoder;
-            this.setState({coders:updatedCoders,editIndex:null});
-        }else{
-            this.setState({ coders: [newCoder, ...this.state.coders] })
-        }                 
+    // handleSubmit ajoute un nouveau développeur.
+    handleSubmit() {
+        // on creer Un objet newCoder pour recuperer les valeurs actuelles des champs du formulaire (prénom, nom, email, téléphone).
+        const newCoder = {
+            prenom: this.state.prenomInput,
+            nom: this.state.nomInput,
+            email: this.state.emailInput,
+            telephone: this.state.telelphoneInput
+        }
+        // setState est utilisée pour ajouter l'objet au tableau coders,
+        //  tout en gardant les anciens éléments du tableau grâce à la syntaxe ...this.state.coders.
+        this.setState({ coders: [newCoder, ...this.state.coders] })
+        // Ensuite, les champs du formulaire sont réinitialisés à des chaînes vides
         this.setState({
-            prenomInput:"",
-            nomInput:"",
-            emailInput:"",
-            telelphoneInput:""
+            prenomInput: "",
+            nomInput: "",
+            emailInput: "",
+            telelphoneInput: ""
         })
     }
 
-    handleEdit(index){
-const coder=this.state.coders[index]
-this.setState({
-    prenomInput:coder.prenom,
-    nomInput:coder.nom,
-    emailInput:coder.email,
-    telelphoneInput:coder.telephone,
-    editIndex:index
-})
+    // charge les informations d'un développeur existant pour les modifier.
+    handleEdit(index) {
+        // On récupère les données du coder à travers l'index donné
+        const coder = this.state.coders[index]
+        // Les champs du formulaire sont mis à jour avec les valeurs du "coder" sélectionné.
+        this.setState({
+            prenomInput: coder.prenom,
+            nomInput: coder.nom,
+            emailInput: coder.email,
+            telelphoneInput: coder.telephone,
+            isEditing: true,
+            //index de l'état  permet d'enregistrer l'index de l'élément en cours de modification
+            index: index
+        })
     }
 
-    handleSaveEdit(){
-        if (this.state.editIndex!==null) {
-            const updatedCoders=[...this.state.coders];
-            updatedCoders[this.state.editIndex]={
-                prenom:this.state.prenomInput,
-                nom:this.state.nom,
-                email:this.state.emailInput,
-                telephone:this.state.telelphoneInput
-            };
-            this.setState({
-                coders:updatedCoders,
-                prenomInput:"",
-                nomInput:"",
-                emailInput:"",
-                telelphoneInput:"",
-                editIndex:null
-            })
+    // Cette méthode est utilisée pour enregistrer les modifications apportées à un "coder" après l'édition
+    handleSaveEdit() {
+        /*   On veut recuperer les donnés modifier dans le formulaire
+        On enregistre les donnes dans leurs index initiale */
+        
+        // Elle crée un objet modifCoder contenant les nouvelles informations issues du formulaire.
+        const modifCoder = {
+            prenom: this.state.prenomInput,
+            nom: this.state.nomInput,
+            email: this.state.emailInput,
+            telephone: this.state.telelphoneInput
         }
+        // Elle crée une copie de la liste actuelle des développeurs (updateCoders) à l’aide de l’opérateur de décomposition (...).
+        const updateCoders = [...this.state.coders]
+        // Ensuite, elle remplace l'élément à l'index stocké dans l'état (this.state.index) par l'objet modifCoder.
+        updateCoders[this.state.index] = modifCoder
+        this.setState({
+            coders: updateCoders,
+            prenomInput: "",
+            nomInput: "",
+            emailInput: "",
+            telelphoneInput: "",
+            // remet index à null pour sortir du mode d’édition.
+            index:null
+        })
     }
 
     render() {
@@ -113,12 +124,10 @@ this.setState({
                         </div>
                     </div>
                     <div>
-                        {this.state.editIndex!==null ?
-                            <button onClick={this.handleSaveEdit} 
-                            class="btn btn-success w-100">Enregistrer
-                            </button> : 
-                            <button onClick={this.handleClick} 
-                            class="btn btn-success w-100">Submit</button>
+                        {
+                            this.state.index !==null ?
+                                <button onClick={this.handleSaveEdit} className="btn btn-warning w-100">Modifier</button> :
+                                <button onClick={this.handleSubmit} className="btn btn-success w-100">Submit</button>
                         }
                     </div>
                 </div>
@@ -135,19 +144,19 @@ this.setState({
                             </tr>
                         </thead>
                         <tbody>
-                       {
-                        this.state.coders.map((coder,index)=>{
-                            return <tr>
-                                <td>{coder.prenom}</td>
-                                <td>{coder.nom}</td>
-                                <td>{coder.email}</td>
-                                <td>{coder.telephone}</td>
-                                <td>
-                                    <button onClick={()=>this.handleEdit(index)} className="btn btn-warning">Modifier</button>
-                                    </td>
-                            </tr>
-                        })
-                       }
+                            {
+                                this.state.coders.map((coder, index) => {
+                                    return <tr>
+                                        <td>{coder.prenom}</td>
+                                        <td>{coder.nom}</td>
+                                        <td>{coder.email}</td>
+                                        <td>{coder.telephone}</td>
+                                        <td>
+                                            <button onClick={() => this.handleEdit(index)} className="btn btn-warning">Modifier</button>
+                                        </td>
+                                    </tr>
+                                })
+                            }
                         </tbody>
                     </table>
                 </div>
