@@ -45,7 +45,7 @@ class Jeemacoder extends React.Component {
             nomInput: coder.nom,
             emailInput: coder.email,
             telelphoneInput: coder.telephone,
-            isEditing: true,
+            // isEditing: true,
             //index de l'état  permet d'enregistrer l'index de l'élément en cours de modification
             index: index
         })
@@ -55,7 +55,7 @@ class Jeemacoder extends React.Component {
     handleSaveEdit() {
         /*   On veut recuperer les donnés modifier dans le formulaire
         On enregistre les donnes dans leurs index initiale */
-        
+
         // Elle crée un objet modifCoder contenant les nouvelles informations issues du formulaire.
         const modifCoder = {
             prenom: this.state.prenomInput,
